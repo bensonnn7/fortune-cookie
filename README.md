@@ -24,7 +24,13 @@
 
 ## Description
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+A project give your daily motivation based on what you do and want
+Functionality including
+
+1. signup/login
+2. give you post on daily basis
+3. post your motivation and send back to your in some day
+4. track your motivation and write that days feeling
 
 ## Installation
 
