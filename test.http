@@ -1,0 +1,16 @@
+
+
+POST http://localhost:3000/users
+content-type: application/json
+
+{
+  "email": "john1.sam@airmart.us",
+  "password": "12345678",
+  "name": "Jone1"
+}
+// 
+GET http://localhost:3000/users 
+
+
+
+

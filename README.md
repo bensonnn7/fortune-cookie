@@ -31,6 +31,7 @@ Functionality including
 2. give you post on daily basis
 3. post your motivation and send back to your in some day
 4. track your motivation and write that days feeling
+5. Add the only thing for today, as long as you did it the rest doesn't matter
 
 ## Installation
 
