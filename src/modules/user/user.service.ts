@@ -12,9 +12,9 @@ export class UserService {
 
   async signup(createUserDto: CreateUserDto) {
     const user = await this.findByEmail(createUserDto.email);
-    if (user.length > 0) {
-      throw new BadRequestException('Email already exists');
-    }
+    // if (user.length > 0) {
+    //   throw new BadRequestException('Email already exists');
+    // }
     return await this.userRepository.save(createUserDto);
   }
 
@@ -26,12 +26,11 @@ export class UserService {
   }
 
   findByEmail(email: string) {
-    return this.userRepository.find({ where: { email } });
+    console.log('email: ', email);
+    return this.userRepository.findOne({ where: { email } });
   }
-  // update(id: number, updateUserDto: UpdateUserDto) {
-  //   return `This action updates a #${id} user`;
-  // }
-  // remove(id: number) {
-  //   return `This action removes a #${id} user`;
-  // }
+
+  findById(id: number) {
+    return this.userRepository.findOne({ where: { id } });
+  }
 }
