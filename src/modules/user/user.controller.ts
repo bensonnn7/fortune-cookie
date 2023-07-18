@@ -19,7 +19,7 @@ export class UserController {
 
   @Post('signup')
   signup(@Body() createUserDto: CreateUserDto) {
-    return this.userService.signup(createUserDto);
+    return this.userService.emailSignup(createUserDto);
   }
 
   @Get()
