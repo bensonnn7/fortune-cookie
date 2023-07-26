@@ -11,40 +11,31 @@ import {
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
-import { UpdateUserDto } from './dto/update-user.dto';
-import { AuthGuard } from '../auth/auth.guard';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard';
+import { Public } from '../auth/public.decorator';
+
+@UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
-  constructor(private readonly userService: UserService) {}
+  constructor(
+    private readonly userService: UserService, // private readonly authService: AuthService,
+  ) {}
 
+  // @Public()
   @Post('signup')
   signup(@Body() createUserDto: CreateUserDto) {
     return this.userService.emailSignup(createUserDto);
   }
 
+  // @UseGuards(AuthGuard)
   @Get()
   getAllUser() {
     return this.userService.getAllUser();
   }
 
-  @UseGuards(AuthGuard)
+  @Public()
   @Get('test')
-  getProfile(@Request() req) {
-    return req.user;
+  getProfile() {
+    return '123';
   }
-
-  // @Get(':id')
-  // findById(@Param('id') id: string) {
-  //   return this.userService.findById(+id);
-  // }
-
-  // @Patch(':id')
-  // update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-  //   return this.userService.update(+id, updateUserDto);
-  // }
-
-  // @Delete(':id')
-  // remove(@Param('id') id: string) {
-  //   return this.userService.remove(+id);
-  // }
 }

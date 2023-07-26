@@ -6,6 +6,7 @@ import { User } from './modules/user/entities/user.entity';
 import { UserController } from './modules/user/user.controller';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { CookiesModule } from './modules/cookies/cookies.module';
 @Module({
   imports: [
     TypeOrmModule.forRoot({
@@ -22,6 +23,7 @@ import { AuthModule } from './modules/auth/auth.module';
     }),
     UserModule,
     AuthModule,
+    CookiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],

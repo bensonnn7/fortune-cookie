@@ -33,9 +33,6 @@ export class UserService {
     }
   }
 
-  signin() {
-    return 'signin';
-  }
   getAllUser() {
     return this.userRepository.find();
   }

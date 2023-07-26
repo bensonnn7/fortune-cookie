@@ -1,3 +1,4 @@
+// save this as reference so i konw how passport works under the hood
 import {
   CanActivate,
   ExecutionContext,

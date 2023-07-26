@@ -1,26 +1,26 @@
 import {
-  Post,
-  Get,
-  Request,
-  Body,
   Controller,
+  Get,
+  Post,
+  Body,
+  Patch,
+  Param,
+  Delete,
+  Request,
   UseGuards,
 } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { SignInDto } from './auth.dto';
-import { AuthGuard } from './auth.guard';
+import { AuthGuard } from '@nestjs/passport';
+import { AuthService } from '../auth/auth.service';
 @Controller('auth')
 export class AuthController {
-  constructor(private readonly authService: AuthService) {}
+  constructor(
+    private readonly authService: AuthService, // private readonly authService: AuthService,
+  ) {}
 
-  @Post('signin')
-  emailSignIn(@Body() signInDto: SignInDto) {
-    return this.authService.emailSignIn(signInDto.email, signInDto.password);
-  }
-
-  @UseGuards(AuthGuard)
-  @Get('test')
-  getProfile(@Request() req) {
-    return req.user;
+  @UseGuards(AuthGuard('local'))
+  @Post('login')
+  emailLogIn(@Request() req) {
+    const { id, name } = req.user;
+    return this.authService.generateJwtToken(id, name);
   }
 }
