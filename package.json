@@ -31,6 +31,7 @@
     "@nestjs/typeorm": "^10.0.0",
     "axios": "^1.4.0",
     "bcrypt": "^5.1.0",
+    "cheerio": "^1.0.0-rc.12",
     "mysql": "^2.18.1",
     "passport": "^0.6.0",
     "passport-jwt": "^4.0.1",
