@@ -7,6 +7,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { Track } from './modules/track/entities/track.entity';
 import { TrackModule } from './modules/track/track.module';
+import { NotificationModule } from './modules/notification/notification.module';
 // import { CookiesModule } from './modules/cookies/cookies.module';
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { TrackModule } from './modules/track/track.module';
     UserModule,
     AuthModule,
     TrackModule,
+    NotificationModule,
     // CookiesModule,
   ],
   controllers: [AppController],

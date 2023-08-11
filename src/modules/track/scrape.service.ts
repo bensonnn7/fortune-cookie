@@ -2,6 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as cheerio from 'cheerio';
 import { get } from 'http';
+import { NotificationService } from '../notification/notification.service';
 
 const AXIOS_HEADER = {
   headers: {
@@ -12,8 +13,11 @@ const AXIOS_HEADER = {
   },
 };
 @Injectable()
-export class ScrapeService {
-  constructor(private readonly axiosService: HttpService) {}
+export class ScrapingService {
+  constructor(
+    private readonly axiosService: HttpService,
+    private readonly notificationService: NotificationService,
+  ) {}
 
   async getProductInfo(url): Promise<any> {
     try {
@@ -29,8 +33,8 @@ export class ScrapeService {
         price,
         url,
       };
-      console.log('product: ', product);
-      return product;
+      return await this.notificationService.sendNotification();
+      // return product;
     } catch (e) {
       console.log('fetch fail', e);
     }
@@ -42,6 +46,7 @@ export class ScrapeService {
     const priceInNum = parseInt(productPrice);
     return priceInNum;
   }
+
   getProductName($, div) {
     const name = $(div).find('h1 span#productTitle').text().trim();
     return name;

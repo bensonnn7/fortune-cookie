@@ -4,10 +4,11 @@ import { TrackController } from './track.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Track } from './entities/track.entity';
 import { HttpModule } from '@nestjs/axios';
-import { ScrapeService } from './scrape.service';
+import { ScrapingService } from './scrape.service';
+import { NotificationModule } from '../notification/notification.module';
 @Module({
-  imports: [TypeOrmModule.forFeature([Track]), HttpModule],
+  imports: [TypeOrmModule.forFeature([Track]), HttpModule, NotificationModule],
   controllers: [TrackController],
-  providers: [TrackService, ScrapeService],
+  providers: [TrackService, ScrapingService],
 })
 export class TrackModule {}
