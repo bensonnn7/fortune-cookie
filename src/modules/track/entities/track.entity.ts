@@ -6,6 +6,11 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
+export enum ENTITY_STATUS {
+  PENDING = '0',
+  SENT = '1',
+  FAILED = '2',
+}
 @Entity()
 export class Track {
   @PrimaryGeneratedColumn()
@@ -25,6 +30,9 @@ export class Track {
 
   @Column({ name: 'user_id' })
   userId: number;
+
+  @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })
+  status: ENTITY_STATUS;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

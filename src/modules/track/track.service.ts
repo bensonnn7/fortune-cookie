@@ -4,7 +4,7 @@ import { Repository } from 'typeorm';
 //
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
-import { Track } from './entities/track.entity';
+import { Track, ENTITY_STATUS } from './entities/track.entity';
 
 @Injectable()
 export class TrackService {
@@ -19,11 +19,19 @@ export class TrackService {
     track.createdPrice = createTrackDto.createdPrice;
     track.targetPrice = createTrackDto.targetPrice;
     track.userId = userId;
+    track.status = ENTITY_STATUS.PENDING;
+
     if (createTrackDto.percentChange && createTrackDto.createdPrice < 100) {
       track.targetPrice =
         track.createdPrice * (100 - createTrackDto.percentChange / 100);
     }
     return this.trackRepository.save(track);
+  }
+
+  async getPendingTracks(): Promise<Track[]> {
+    return await this.trackRepository.find({
+      where: { status: ENTITY_STATUS.PENDING },
+    });
   }
 
   async findAll(userId: number) {

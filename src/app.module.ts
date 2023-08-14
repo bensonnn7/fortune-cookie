@@ -8,9 +8,12 @@ import { AuthModule } from './modules/auth/auth.module';
 import { Track } from './modules/track/entities/track.entity';
 import { TrackModule } from './modules/track/track.module';
 import { NotificationModule } from './modules/notification/notification.module';
+import { ScheduleModule } from '@nestjs/schedule';
+
 // import { CookiesModule } from './modules/cookies/cookies.module';
 @Module({
   imports: [
+    ScheduleModule.forRoot(),
     TypeOrmModule.forRoot({
       type: 'mysql',
       host: 'localhost',

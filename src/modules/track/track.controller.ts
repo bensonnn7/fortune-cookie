@@ -33,7 +33,7 @@ export class TrackController {
 
   @Get('test')
   async test(@Request() req) {
-    return await this.scrapingService.getProductInfo(TEST_URL);
+    return await this.scrapingService.startScraping();
   }
 
   @Get()
