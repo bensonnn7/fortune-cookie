@@ -5,6 +5,7 @@ import { NotificationService } from '../notification/notification.service';
 import { TrackService } from '../track/track.service';
 import { ScrapeResultDto } from './dto/scrape-result.dto';
 import { Cron } from '@nestjs/schedule';
+import { delay } from '../../common/utils';
 const AXIOS_HEADER = {
   headers: {
     'User-Agent':
@@ -33,26 +34,28 @@ export class ScrapingService {
 
     // step 2 scrape each track
     const fetchFailList: Array<number> = [];
-    const notificationList: Array<number> = [];
+    const notificationTrackIds: Array<number> = [];
 
     for (let i = 0; i < pendingTracks.length; i++) {
-      const { url, id, createdPrice } = pendingTracks[i];
+      const { url, id, targetPrice } = pendingTracks[i];
       console.log(
-        `Start ${i + 1}th scraping at ${new Date().toLocaleString()}}`,
+        `Start ${i + 1}th scraping at ${new Date().toLocaleString()}`,
       );
       try {
-        const { price, name } = await this.getProductInfo(url);
+        const { price } = await this.getProductInfo(url);
+        await delay(1000);
         // step 3 compare price
-        const shouldNotify = this.checkShouldNotify(price, createdPrice);
+        const shouldNotify = price < targetPrice;
         if (shouldNotify) {
-          const content = this.generateNotification(name, price);
-          notificationList.push(id);
+          notificationTrackIds.push(id);
         }
         // step 5 update track
       } catch (err) {
         fetchFailList.push(id);
       }
     }
+
+    console.log('notificationTrackIds: ', notificationTrackIds);
 
     // step 3 send notification
     // return await this.notificationService.sendNotification();
@@ -92,13 +95,5 @@ export class ScrapingService {
     const name = $(div).find('h1 span#productTitle').text().trim();
     // TODO: limit the name length if too long
     return name;
-  }
-
-  checkShouldNotify(currentPrice, createdPrice) {
-    return currentPrice < createdPrice;
-  }
-
-  generateNotification(name, price) {
-    return `${name} is now ${price}`;
   }
 }

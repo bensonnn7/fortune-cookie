@@ -18,7 +18,7 @@ export class TrackService {
     track.url = createTrackDto.url;
     track.createdPrice = createTrackDto.createdPrice;
     track.targetPrice = createTrackDto.targetPrice;
-    track.userId = userId;
+    // track.userId = userId;
     track.status = ENTITY_STATUS.PENDING;
 
     if (createTrackDto.percentChange && createTrackDto.createdPrice < 100) {
@@ -35,8 +35,8 @@ export class TrackService {
   }
 
   async findAll(userId: number) {
-    const tracks = await this.trackRepository.find({ where: { userId } });
-    return tracks;
+    // const tracks = await this.trackRepository.find({ where: { userId } });
+    // return tracks;
   }
 
   findOne(id: number) {

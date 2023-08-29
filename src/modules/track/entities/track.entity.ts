@@ -4,8 +4,9 @@ import {
   PrimaryGeneratedColumn,
   CreateDateColumn,
   UpdateDateColumn,
+  ManyToOne,
 } from 'typeorm';
-
+import { User } from 'src/modules/user/entities/user.entity';
 export enum ENTITY_STATUS {
   PENDING = '0',
   SENT = '1',
@@ -28,8 +29,8 @@ export class Track {
   @Column({ name: 'target_price' })
   targetPrice: number;
 
-  @Column({ name: 'user_id' })
-  userId: number;
+  @ManyToOne(() => User, (user) => user.track)
+  user: User;
 
   @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })
   status: ENTITY_STATUS;
