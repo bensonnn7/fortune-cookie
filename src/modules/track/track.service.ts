@@ -5,26 +5,27 @@ import { Repository } from 'typeorm';
 import { CreateTrackDto } from './dto/create-track.dto';
 import { UpdateTrackDto } from './dto/update-track.dto';
 import { Track, ENTITY_STATUS } from './entities/track.entity';
-
+import { User } from '../user/entities/user.entity';
 @Injectable()
 export class TrackService {
   constructor(
     @InjectRepository(Track) private trackRepository: Repository<Track>,
   ) {}
 
-  create(createTrackDto: CreateTrackDto, userId: number) {
+  create(createTrackDto: CreateTrackDto, user: User) {
     const track = new Track();
     track.name = createTrackDto.name;
     track.url = createTrackDto.url;
     track.createdPrice = createTrackDto.createdPrice;
     track.targetPrice = createTrackDto.targetPrice;
-    // track.userId = userId;
     track.status = ENTITY_STATUS.PENDING;
 
     if (createTrackDto.percentChange && createTrackDto.createdPrice < 100) {
       track.targetPrice =
         track.createdPrice * (100 - createTrackDto.percentChange / 100);
     }
+    // build relationship
+    track.user = user;
     return this.trackRepository.save(track);
   }
 
@@ -34,9 +35,14 @@ export class TrackService {
     });
   }
 
-  async findAll(userId: number) {
-    // const tracks = await this.trackRepository.find({ where: { userId } });
-    // return tracks;
+  async findAll(user: User) {
+    // find all tracks belong to this user
+    const tracks = await this.trackRepository.find({
+      // where: { user },
+      where: { user: { id: user.id } },
+      // order: { createdAt: 'DESC' },
+    });
+    return tracks;
   }
 
   findOne(id: number) {

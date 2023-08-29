@@ -27,8 +27,8 @@ export class TrackController {
 
   @Post()
   create(@Request() req, @Body() createTrackDto: CreateTrackDto) {
-    const userId = req.user.userId;
-    return this.trackService.create(createTrackDto, userId);
+    const user = req.user;
+    return this.trackService.create(createTrackDto, user);
   }
 
   @Get('test')
@@ -38,8 +38,7 @@ export class TrackController {
 
   @Get()
   findAll(@Request() req) {
-    const userId = req.user.userId;
-    return this.trackService.findAll(userId);
+    return this.trackService.findAll(req.user);
   }
 
   @Get(':id')
