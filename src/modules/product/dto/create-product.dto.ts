@@ -1,4 +1,4 @@
-export class CreateTrackDto {
+export class CreateProductDto {
   name: string;
   url: string;
   createdPrice: number;

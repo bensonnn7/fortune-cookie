@@ -13,7 +13,7 @@ export enum ENTITY_STATUS {
   FAILED = '2',
 }
 @Entity()
-export class Track {
+export class Product {
   @PrimaryGeneratedColumn()
   id: number;
 
@@ -29,7 +29,7 @@ export class Track {
   @Column({ name: 'target_price' })
   targetPrice: number;
 
-  @ManyToOne(() => User, (user) => user.track)
+  @ManyToOne(() => User, (user) => user.product)
   user: User;
 
   @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })

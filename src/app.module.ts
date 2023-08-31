@@ -7,8 +7,8 @@ import { UserModule } from './modules/user/user.module';
 //
 import { AuthModule } from './modules/auth/auth.module';
 //
-import { Track } from './modules/track/entities/track.entity';
-import { TrackModule } from './modules/track/track.module';
+import { Product } from './modules/product/entities/product.entity';
+import { ProductModule } from './modules/product/product.module';
 //
 import { Notification } from './modules/notification/notification.entity';
 import { NotificationModule } from './modules/notification/notification.module';
@@ -25,14 +25,14 @@ import { ScheduleModule } from '@nestjs/schedule';
       username: 'root',
       password: 'root',
       database: 'fortune-cookie',
-      entities: [User, Track, Notification],
+      entities: [User, Product, Notification],
       // entities: ['dist/**/*.entity{.ts,.js}'], // Path to your entity files
       synchronize: true,
       // poolSize: 10,
     }),
     UserModule,
     AuthModule,
-    TrackModule,
+    ProductModule,
     NotificationModule,
     // CookiesModule,
   ],

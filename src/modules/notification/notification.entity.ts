@@ -7,7 +7,7 @@ import {
   UpdateDateColumn,
   OneToOne,
 } from 'typeorm';
-import { Track } from '../track/entities/track.entity';
+import { Product } from '../product/entities/product.entity';
 
 export enum ENTITY_STATUS {
   PENDING = '0',
@@ -20,8 +20,8 @@ export class Notification {
   id: number;
 
   @JoinColumn({ name: 'user_id' })
-  @OneToOne(() => Track)
-  track: Track;
+  @OneToOne(() => Product)
+  product: Product;
   // @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })
   // status: ENTITY_STATUS;
   @CreateDateColumn({ name: 'created_at' })

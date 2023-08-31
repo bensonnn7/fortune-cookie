@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
 import * as cheerio from 'cheerio';
 import { NotificationService } from '../notification/notification.service';
-import { TrackService } from '../track/track.service';
+import { ProductService } from '../product/product.service';
 import { ScrapeResultDto } from './dto/scrape-result.dto';
 import { Cron } from '@nestjs/schedule';
 import { delay } from '../../common/utils';
@@ -20,7 +20,7 @@ export class ScrapingService {
   constructor(
     private readonly axiosService: HttpService,
     private readonly notificationService: NotificationService,
-    private readonly trackServices: TrackService,
+    private readonly trackServices: ProductService,
   ) {}
 
   // @Cron('45 * * * * *')
@@ -28,7 +28,7 @@ export class ScrapingService {
     console.log('test cron job');
   }
 
-  async startScraping() {
+  async scraping() {
     // step 1 get all pending track
     const pendingTracks = await this.trackServices.getPendingTracks();
 
@@ -48,6 +48,8 @@ export class ScrapingService {
         const shouldNotify = price < targetPrice;
         if (shouldNotify) {
           notificationTrackIds.push(id);
+        } else {
+          console.log('not yet');
         }
         // step 5 update track
       } catch (err) {

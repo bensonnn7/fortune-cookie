@@ -6,7 +6,7 @@ import {
   UpdateDateColumn,
   OneToMany,
 } from 'typeorm';
-import { Track } from '../../track/entities/track.entity';
+import { Product } from '../../product/entities/product.entity';
 @Entity()
 export class User {
   @PrimaryGeneratedColumn()
@@ -27,8 +27,8 @@ export class User {
   @UpdateDateColumn()
   updateTime: Date;
 
-  @OneToMany(() => Track, (track) => track.user)
-  track: Track[];
+  @OneToMany(() => Product, (product) => product.user)
+  product: Product[];
 
   // @Column()
   // createdAt: Date;
