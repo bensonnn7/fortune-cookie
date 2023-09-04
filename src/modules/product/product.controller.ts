@@ -37,7 +37,7 @@ export class ProductController {
 
   @Get('test')
   async test(@Request() req) {
-    return await this.scrapingService.scraping();
+    return await this.scrapingService.startScraping();
   }
 
   @Patch(':id')

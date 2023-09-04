@@ -4,6 +4,7 @@ import * as cheerio from 'cheerio';
 import { NotificationService } from '../notification/notification.service';
 import { ProductService } from '../product/product.service';
 import { ScrapeResultDto } from './dto/scrape-result.dto';
+import { CreateNotificationDto } from '../notification/dto/create-notification.dto';
 import { Cron } from '@nestjs/schedule';
 import { delay } from '../../common/utils';
 const AXIOS_HEADER = {
@@ -15,6 +16,7 @@ const AXIOS_HEADER = {
     Accept: 'text/html,application/xhtml+xml',
   },
 };
+
 @Injectable()
 export class ScrapingService {
   constructor(
@@ -28,39 +30,49 @@ export class ScrapingService {
     console.log('test cron job');
   }
 
-  async scraping() {
+  async startScraping() {
     // step 1 get all pending track
     const pendingTracks = await this.trackServices.getPendingTracks();
-
     // step 2 scrape each track
-    const fetchFailList: Array<number> = [];
-    const notificationTrackIds: Array<number> = [];
+    const { notificationProducts, fetchFailProducts } =
+      await this.scrapeProducts(pendingTracks);
+    // console.log('Total pending count: ', pendingTracks.length);
+    // console.log('should notify list: ', notificationProductIds);
+
+    // step 3: add to to notification for sending
+    await this.notificationService.addNotifications(notificationProducts);
+    // TODO: step 4: update fail track status
+    return 'Scrape done';
+  }
+
+  async scrapeProducts(pendingTracks) {
+    const fetchFailProducts: Array<number> = [];
+    const notificationProducts: Array<CreateNotificationDto> = [];
 
     for (let i = 0; i < pendingTracks.length; i++) {
-      const { url, id, targetPrice } = pendingTracks[i];
+      const { url, id, targetPrice, user } = pendingTracks[i];
       console.log(
         `Start ${i + 1}th scraping at ${new Date().toLocaleString()}`,
       );
       try {
         const { price } = await this.getProductInfo(url);
         await delay(1000);
-        // step 3 compare price
-        const shouldNotify = price < targetPrice;
+        const shouldNotify = price <= targetPrice;
+
         if (shouldNotify) {
-          notificationTrackIds.push(id);
+          const notificationRecord = {
+            userId: user.id,
+            productId: id,
+          } as CreateNotificationDto;
+          notificationProducts.push(notificationRecord);
         } else {
           console.log('not yet');
         }
-        // step 5 update track
       } catch (err) {
-        fetchFailList.push(id);
+        fetchFailProducts.push(id);
       }
     }
-
-    console.log('notificationTrackIds: ', notificationTrackIds);
-
-    // step 3 send notification
-    // return await this.notificationService.sendNotification();
+    return { notificationProducts, fetchFailProducts };
   }
 
   async getProductInfo(url): Promise<ScrapeResultDto> {
@@ -81,6 +93,7 @@ export class ScrapingService {
       console.log('fetch fail', e);
     }
   }
+
   // TODO: different account may has different price
   getProductPrice($, div) {
     const productPriceWhole = $(div).find('span .a-price-whole').first().text();

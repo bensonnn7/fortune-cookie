@@ -4,4 +4,5 @@ export class CreateProductDto {
   createdPrice: number;
   targetPrice?: number;
   percentChange?: number;
+  source?: string;
 }

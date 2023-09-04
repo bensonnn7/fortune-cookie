@@ -18,6 +18,7 @@ export class ProductService {
     product.url = createTrackDto.url;
     product.createdPrice = createTrackDto.createdPrice;
     product.targetPrice = createTrackDto.targetPrice;
+    product.source = createTrackDto.source;
     product.status = ENTITY_STATUS.PENDING;
 
     if (createTrackDto.percentChange && createTrackDto.createdPrice < 100) {
@@ -31,6 +32,7 @@ export class ProductService {
 
   async getPendingTracks(): Promise<Product[]> {
     return await this.trackRepository.find({
+      relations: ['user'],
       where: { status: ENTITY_STATUS.PENDING },
     });
   }

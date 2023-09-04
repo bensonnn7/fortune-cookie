@@ -5,6 +5,7 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToOne,
+  JoinColumn,
 } from 'typeorm';
 import { User } from 'src/modules/user/entities/user.entity';
 export enum ENTITY_STATUS {
@@ -30,10 +31,14 @@ export class Product {
   targetPrice: number;
 
   @ManyToOne(() => User, (user) => user.product)
+  @JoinColumn({ name: 'user_id' }) // Rename the foreign key column
   user: User;
 
   @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })
   status: ENTITY_STATUS;
+
+  @Column()
+  source: string;
 
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;

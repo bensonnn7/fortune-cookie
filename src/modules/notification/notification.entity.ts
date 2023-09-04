@@ -8,6 +8,7 @@ import {
   OneToOne,
 } from 'typeorm';
 import { Product } from '../product/entities/product.entity';
+import { User } from '../user/entities/user.entity';
 
 export enum ENTITY_STATUS {
   PENDING = '0',
@@ -19,11 +20,18 @@ export class Notification {
   @PrimaryGeneratedColumn()
   id: number;
 
-  @JoinColumn({ name: 'user_id' })
+  // how should name it
+  @JoinColumn({ name: 'product_id' })
   @OneToOne(() => Product)
   product: Product;
-  // @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })
-  // status: ENTITY_STATUS;
+
+  @JoinColumn({ name: 'user_id' })
+  @OneToOne(() => User)
+  user: User;
+
+  @Column({ type: 'enum', enum: ENTITY_STATUS, default: ENTITY_STATUS.PENDING })
+  status: ENTITY_STATUS;
+
   @CreateDateColumn({ name: 'created_at' })
   createdAt: Date;
   @UpdateDateColumn({ name: 'updated_at' })
