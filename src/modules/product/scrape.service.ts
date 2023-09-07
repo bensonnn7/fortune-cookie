@@ -1,11 +1,12 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, Logger } from '@nestjs/common';
 import { HttpService } from '@nestjs/axios';
+
 import * as cheerio from 'cheerio';
 import { NotificationService } from '../notification/notification.service';
-import { ProductService } from '../product/product.service';
+import { ProductService } from './product.service';
 import { ScrapeResultDto } from './dto/scrape-result.dto';
 import { CreateNotificationDto } from '../notification/dto/create-notification.dto';
-import { Cron } from '@nestjs/schedule';
+import { Cron, CronExpression } from '@nestjs/schedule';
 import { delay } from '../../common/utils';
 const AXIOS_HEADER = {
   headers: {
@@ -22,7 +23,7 @@ export class ScrapingService {
   constructor(
     private readonly axiosService: HttpService,
     private readonly notificationService: NotificationService,
-    private readonly trackServices: ProductService,
+    private readonly productServices: ProductService,
   ) {}
 
   // @Cron('45 * * * * *')
@@ -30,27 +31,28 @@ export class ScrapingService {
     console.log('test cron job');
   }
 
+  // @Cron(CronExpression.EVERY_DAY_AT_6AM)
   async startScraping() {
-    // step 1 get all pending track
-    const pendingTracks = await this.trackServices.getPendingTracks();
-    // step 2 scrape each track
+    // step 1 get all pending product
+    const pendingProducts = await this.productServices.getPendingProducts();
+    // step 2 scrape each product
     const { notificationProducts, fetchFailProducts } =
-      await this.scrapeProducts(pendingTracks);
-    // console.log('Total pending count: ', pendingTracks.length);
+      await this.scrapeProducts(pendingProducts);
+    // console.log('Total pending count: ', pendingProducts.length);
     // console.log('should notify list: ', notificationProductIds);
 
-    // step 3: add to to notification for sending
+    // step 3: add to notification db
     await this.notificationService.addNotifications(notificationProducts);
-    // TODO: step 4: update fail track status
+    // TODO: step 4: update fail product status
     return 'Scrape done';
   }
 
-  async scrapeProducts(pendingTracks) {
+  async scrapeProducts(pendingProducts) {
     const fetchFailProducts: Array<number> = [];
     const notificationProducts: Array<CreateNotificationDto> = [];
 
-    for (let i = 0; i < pendingTracks.length; i++) {
-      const { url, id, targetPrice, user } = pendingTracks[i];
+    for (let i = 0; i < pendingProducts.length; i++) {
+      const { url, id, targetPrice, user } = pendingProducts[i];
       console.log(
         `Start ${i + 1}th scraping at ${new Date().toLocaleString()}`,
       );

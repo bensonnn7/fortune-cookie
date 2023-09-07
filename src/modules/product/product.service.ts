@@ -9,56 +9,55 @@ import { User } from '../user/entities/user.entity';
 @Injectable()
 export class ProductService {
   constructor(
-    @InjectRepository(Product) private trackRepository: Repository<Product>,
+    @InjectRepository(Product) private productRepository: Repository<Product>,
   ) {}
 
-  create(createTrackDto: CreateProductDto, user: User) {
+  create(createProductDto: CreateProductDto, user: User) {
     const product = new Product();
-    product.name = createTrackDto.name;
-    product.url = createTrackDto.url;
-    product.createdPrice = createTrackDto.createdPrice;
-    product.targetPrice = createTrackDto.targetPrice;
-    product.source = createTrackDto.source;
+    product.name = createProductDto.name;
+    product.url = createProductDto.url;
+    product.createdPrice = createProductDto.createdPrice;
+    product.targetPrice = createProductDto.targetPrice;
+    product.source = createProductDto.source;
     product.status = ENTITY_STATUS.PENDING;
 
-    if (createTrackDto.percentChange && createTrackDto.createdPrice < 100) {
+    if (createProductDto.percentChange && createProductDto.createdPrice < 100) {
       product.targetPrice =
-        product.createdPrice * (100 - createTrackDto.percentChange / 100);
+        product.createdPrice * (100 - createProductDto.percentChange / 100);
     }
     // build relationship
     product.user = user;
-    return this.trackRepository.save(product);
+    return this.productRepository.save(product);
   }
 
-  async getPendingTracks(): Promise<Product[]> {
-    return await this.trackRepository.find({
+  async getPendingProducts(): Promise<Product[]> {
+    return await this.productRepository.find({
       relations: ['user'],
       where: { status: ENTITY_STATUS.PENDING },
     });
   }
 
   async findAll(user: User) {
-    // find all tracks belong to this user
-    const tracks = await this.trackRepository.find({
+    const products = await this.productRepository.find({
       // where: { user },
       where: { user: { id: user.id } },
       // order: { createdAt: 'DESC' },
     });
-    return tracks;
+    return products;
   }
 
   async findOne(id: number) {
-    const tracks = await this.trackRepository.find({
+    const products = await this.productRepository.find({
       where: { id },
     });
-    return tracks;
+    return products;
   }
 
-  update(id: number, updateTrackDto: UpdateProductDto) {
-    return `This action updates a #${id} track`;
+  update(id: number, updateProductDto: UpdateProductDto) {
+    return `This action updates a #${id} product`;
   }
 
   remove(id: number) {
-    return `This action removes a #${id} track`;
+    return `This action removes a #${id} product`;
   }
 }

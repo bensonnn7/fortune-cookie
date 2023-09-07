@@ -6,7 +6,8 @@ import { Repository } from 'typeorm';
 
 import { Notification, ENTITY_STATUS } from './notification.entity';
 import { CreateNotificationDto } from './dto/create-notification.dto';
-import { generate } from 'rxjs';
+import { Cron, CronExpression } from '@nestjs/schedule';
+
 const NODE_MAILER_CONFIG = {
   host: 'smtp.gmail.com',
   port: 587,
@@ -39,6 +40,7 @@ export class NotificationService {
     }
   }
 
+  // @Cron(CronExpression.EVERY_DAY_AT_7AM)
   async sendNotification() {
     // step 1: get all pending notification
     const pendingNotifications = await this.notificationRepository.find({

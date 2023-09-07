@@ -25,9 +25,9 @@ export class ProductController {
   ) {}
 
   @Post()
-  create(@Request() req, @Body() createTrackDto: CreateProductDto) {
+  create(@Request() req, @Body() createProductDto: CreateProductDto) {
     const user = req.user;
-    return this.productService.create(createTrackDto, user);
+    return this.productService.create(createProductDto, user);
   }
 
   @Get()
@@ -41,8 +41,8 @@ export class ProductController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateTrackDto: UpdateProductDto) {
-    return this.productService.update(+id, updateTrackDto);
+  update(@Param('id') id: string, @Body() updateProductDto: UpdateProductDto) {
+    return this.productService.update(+id, updateProductDto);
   }
 
   @Delete(':id')
