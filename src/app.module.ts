@@ -14,7 +14,6 @@ import { Notification } from './modules/notification/notification.entity';
 import { NotificationModule } from './modules/notification/notification.module';
 import { ScheduleModule } from '@nestjs/schedule';
 
-// import { CookiesModule } from './modules/cookies/cookies.module';
 @Module({
   imports: [
     ScheduleModule.forRoot(),
@@ -34,7 +33,6 @@ import { ScheduleModule } from '@nestjs/schedule';
     AuthModule,
     ProductModule,
     NotificationModule,
-    // CookiesModule,
   ],
   controllers: [AppController],
   providers: [AppService],
