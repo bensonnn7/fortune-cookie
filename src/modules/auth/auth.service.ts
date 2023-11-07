@@ -7,6 +7,7 @@ import { UserService } from 'src/modules/user/user.service';
 import { compareSync } from 'bcrypt';
 
 import { JwtService } from '@nestjs/jwt';
+import { User } from 'src/modules/user/entities/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
@@ -14,7 +15,7 @@ export class AuthService {
     private jwtService: JwtService,
   ) {}
 
-  async validateUserByEmailPass(email: string, pass: string): Promise<any> {
+  async validateUserByEmailPass(email: string, pass: string): Promise<User> {
     const user = await this.userService.findByEmail(email);
     if (user && !compareSync(pass, user.password)) {
       throw new UnauthorizedException();
@@ -29,15 +30,4 @@ export class AuthService {
       access_token: this.jwtService.sign(payload),
     };
   }
-
-  // async emailSignIn(email: string, pass: string) {
-  //   const user = await this.userService.findByEmail(email);
-  //   if (user && !compareSync(pass, user.password)) {
-  //     throw new UnauthorizedException();
-  //   }
-  //   const payload = { sub: user.id, username: user.name };
-  //   return {
-  //     access_token: await this.jwtService.signAsync(payload),
-  //   };
-  // }
 }

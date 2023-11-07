@@ -14,6 +14,9 @@ import { CreateUserDto } from './dto/create-user.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { Public } from '../auth/public.decorator';
 
+// Guard without passport
+// import { AuthGuard } from '../auth/example.auth.guard'
+// @UseGuards(AuthGuard)
 @UseGuards(JwtAuthGuard)
 @Controller('users')
 export class UserController {
@@ -27,7 +30,7 @@ export class UserController {
     return this.userService.emailSignup(createUserDto);
   }
 
-  // @UseGuards(AuthGuard)
+  
   @Get()
   getAllUser(@Request() req) {
     console.log(req.user);

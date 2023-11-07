@@ -1,4 +1,5 @@
-// save this as reference so i konw how passport works under the hood
+// save this as reference so i know how guard, passport works under the hood
+
 import {
   CanActivate,
   ExecutionContext,
